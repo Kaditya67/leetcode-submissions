@@ -5,21 +5,21 @@ public:
         vector<int> result;
         vector<int> freq(n+1,0);
         int count=0;
-        for(int i=0;i<n;i++){
-            freq[A[i]]++;
-            freq[B[i]]++;
+        for(int i=0;i<n;++i){
+            ++freq[A[i]];
+            ++freq[B[i]];
 
             if(A[i]==B[i]){
-                count++;
+                ++count;
                 result.push_back(count);
                 continue;
             }
             if(freq[A[i]]>1){
-                count++;
+                ++count;
             }
 
             if(freq[B[i]]>1){
-                count++;
+                ++count;
             }
             result.push_back(count);
         }
