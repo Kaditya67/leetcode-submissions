@@ -1,33 +1,59 @@
 class Solution {
 public:
     int xorAllNums(vector<int>& nums1, vector<int>& nums2) {
-        // Get lengths of arrays
-        int len1 = nums1.size();
-        int len2 = nums2.size();
-
-        // Map to store frequency of each number
-        unordered_map<int, long> freq;
-
-        // Add frequencies for nums1 elements
-        // Each element appears len2 times in final result
-        for (int num : nums1) {
-            freq[num] += len2;
+        // map<int,int>M,M1;
+        // for(int i=0;i<Nums1.size();i++)
+        // {
+        //     M[Nums1[i]]++;
+        //     // M1[Nums2[i]]++
+        // }
+        // for(int i=0;i<Nums2.size();i++)
+        // {
+        //     // M[Nums1[i]]++;
+        //     M1[Nums2[i]]++;
+        // }
+        // vector<int>nums1,nums2;
+        // for(auto it : M)
+        // {
+        //     nums1.push_back(it.first);
+        // }
+        // for(auto it : M1)
+        // {
+        //     nums2.push_back(it.first);
+        // }
+        int sz=nums1.size();
+        int sz1=nums2.size();
+        if(sz%2==0 && sz1%2==0)
+        {
+            return 0;
         }
-
-        // Add frequencies for nums2 elements
-        // Each element appears len1 times in final result
-        for (int num : nums2) {
-            freq[num] += len1;
-        }
-
-        // XOR numbers that appear odd number of times
-        int ans = 0;
-        for (auto& [num, count] : freq) {
-            if (count % 2 == 1) {
-                ans ^= num;
+        if(sz%2==1 && sz1%2==0)
+        {
+            int P=0;
+            for(int i=0;i<nums2.size();i++)
+            {
+                P=(P^nums2[i]);
             }
+            return P;
         }
-
-        return ans;
+        if(sz%2==0 && sz1%2==1)
+        {
+            int P=0;
+            for(int i=0;i<nums1.size();i++)
+            {
+                P=(P^nums1[i]);
+            }
+            return P;
+        }
+        int P=0;
+        for(int i=0;i<nums1.size();i++)
+        {
+            P=(P^nums1[i]);
+        }
+        for(int i=0;i<nums2.size();i++)
+        {
+            P=(P^nums2[i]);
+        }
+        return P;
     }
 };
