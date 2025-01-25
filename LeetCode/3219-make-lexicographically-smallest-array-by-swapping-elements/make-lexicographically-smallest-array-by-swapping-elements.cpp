@@ -2,37 +2,31 @@ class Solution {
 public:
     vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
         int n = nums.size();
+        vector<pair<int,int>> vp(n);
+        for(int i=0;i<n;i++)vp[i]={nums[i],i};
 
-        vector<int> vec = nums;
-        //sort the vec
-        sort(begin(vec), end(vec));
-
-        int groupNum = 0;
-        unordered_map<int, int> numToGroup;
-        numToGroup[vec[0]] = groupNum;
-
-        unordered_map<int, list<int>> groupToList;
-        groupToList[groupNum].push_back(vec[0]); //O(1)
-
-        for(int i = 1; i < n; i++) {
-            if(abs(vec[i] - vec[i-1]) > limit) {
-                groupNum += 1;
+        sort(vp.begin(),vp.end());
+        vector<int> ind;
+        ind.push_back(vp[0].second);
+        int prv=0;
+        for(int i=1;i<n;i++){
+            if(abs(vp[i].first-vp[i-1].first)<=limit){
+                ind.push_back(vp[i].second);
             }
+            else{
+                sort(ind.begin()+prv,ind.end());
+                prv=i;
+                ind.push_back(vp[i].second);
 
-            numToGroup[vec[i]] = groupNum;
-            groupToList[groupNum].push_back(vec[i]);
+            }
         }
+        sort(ind.begin()+prv,ind.end());
+
+        for(int i=0;i<n;i++){
+            nums[ind[i]]=vp[i].first;
+        }
+        return nums;
         
-        //Build the anwer - Merge the groups
-        vector<int> result(n);
-        for(int i = 0; i < n; i++) {
-            int num = nums[i];
-            int group = numToGroup[num];
-            //smallest available number in this group
-            result[i] = *groupToList[group].begin(); //use hogaya to delete kardo used element ko
-            groupToList[group].pop_front();
-        }
 
-        return result;
     }
 };
