@@ -1,49 +1,27 @@
-#include <vector>
-#include <queue>
-#include <algorithm>
-
-using namespace std;
-
 class Solution {
-private:
-    int countFishes(vector<vector<int>>& grid, vector<vector<bool>>& visited, int row, int col) {
-        int numRows = grid.size(), numCols = grid[0].size(), fishCount = 0;
-        queue<pair<int, int>> q;
-        q.push({row, col});
-        visited[row][col] = true;
-
-        vector<int> rowDirections = {0, 0, 1, -1};
-        vector<int> colDirections = {1, -1, 0, 0};
-
-        while (!q.empty()) {
-            int curRow = q.front().first, curCol = q.front().second;
-            q.pop();
-            fishCount += grid[curRow][curCol];
-
-            for (int i = 0; i < 4; i++) {
-                int newRow = curRow + rowDirections[i], newCol = curCol + colDirections[i];
-                if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols &&
-                    grid[newRow][newCol] > 0 && !visited[newRow][newCol]) {
-                    q.push({newRow, newCol});
-                    visited[newRow][newCol] = true;
-                }
-            }
-        }
-        return fishCount;
-    }
-
 public:
+    int dfs(int r,int c,int row,int col,vector<vector<int>>& grid){
+        if(r<0 || c<0 || r>=row || c >=col || grid[r][c]==0) return 0;
+        int curr = grid[r][c];
+        grid[r][c]=0;
+        curr+=dfs(r+1,c,row, col, grid);
+        curr+=dfs(r-1,c,row, col, grid);
+        curr+=dfs(r,c+1,row, col, grid);
+        curr+=dfs(r,c-1,row, col, grid);
+        return curr;
+    }
     int findMaxFish(vector<vector<int>>& grid) {
-        int numRows = grid.size(), numCols = grid[0].size(), result = 0;
-        vector<vector<bool>> visited(numRows, vector<bool>(numCols, false));
+        int row = grid.size();
+        int col = grid[0].size();
+        int ans = 0;
 
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                if (grid[i][j] > 0 && !visited[i][j]) {
-                    result = max(result, countFishes(grid, visited, i, j));
+        for(int r=0;r<row;r++){
+            for(int c=0;c<col;c++){
+                if(grid[r][c]!=0){
+                    ans = max(ans,dfs(r,c,row, col, grid));
                 }
             }
         }
-        return result;
+        return ans;
     }
 };
