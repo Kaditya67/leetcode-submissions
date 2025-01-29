@@ -1,45 +1,25 @@
 class Solution {
 public:
-
-    bool dfs(unordered_map<int, vector<int>> &adj, int u, int v, vector<bool>& visited) {
-        visited[u] = true;
-
-        if(u == v) {
-            return true;
-        }
-
-        for(int &ngbr : adj[u]) {
-            if(visited[ngbr]) continue;
-
-            if(dfs(adj, ngbr, v, visited)) {
-                return true;
-            }
-        }
-
-        return false;
-
+    int findPar(int p, vector<int>& par) {
+        if (p == par[p]) return p;
+        return par[p] = findPar(par[p], par); // Path compression
     }
 
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        int n = edges.size();
-        //number of nodes = n
-        //number of edges = n
+        vector<int> p(1001); // Assuming node values are <= 1000
+        for (int i = 0; i < p.size(); i++)
+            p[i] = i; // Initialize each node as its own parent
 
-        unordered_map<int, vector<int>> adj;
+        vector<int> res;
+        for (auto& v : edges) {
+            int n1 = findPar(v[0], p); // Find representative of n1
+            int n2 = findPar(v[1], p); // Find representative of n2
 
-        for(int i = 0; i < n; i++) {
-            int u = edges[i][0];
-            int v = edges[i][1];
-            
-            vector<bool> visited(n, false);
-            if(adj.find(u) != adj.end() && adj.find(v) != adj.end() && dfs(adj, u, v, visited)) {
-                return edges[i];
-            }
-
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+            if (n1 == n2) // Cycle detected
+                res = v;
+            else
+                p[n1] = n2; // Union operation
         }
-
-        return {};
+        return res;
     }
 };
