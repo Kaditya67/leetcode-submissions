@@ -2,36 +2,22 @@ class Solution {
 public:
     bool check(vector<int>& nums) {
         int n = nums.size();
+        if (n <= 1) return true;
 
-        // Construct the rotated array
-        vector<int> checkSorted(n);
+        int inversionCount = 0;
 
-        // Iterate through all possible rotation offsets
-        for (int rotationOffset = 0; rotationOffset < n; ++rotationOffset) {
-            int currIndex = 0;
-            for (int index = rotationOffset; index < n; ++index) {
-                checkSorted[currIndex++] = (nums[index]);
-            }
-            for (int index = 0; index < rotationOffset; ++index) {
-                checkSorted[currIndex++] = (nums[index]);
-            }
-
-            // Check if the constructed array is sorted
-            bool isSorted = true;
-            for (int index = 0; index < n - 1; ++index) {
-                if (checkSorted[index] > checkSorted[index + 1]) {
-                    isSorted = false;
-                    break;
-                }
-            }
-
-            // If sorted, return true
-            if (isSorted) {
-                return true;
+        // For every pair, count the number of inversions.
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] < nums[i - 1]) {
+                ++inversionCount;
             }
         }
 
-        // If no rotation makes the array sorted, return false
-        return false;
+        // Also check between the last and the first element due to rotation
+        if (nums[0] < nums[n - 1]) {
+            ++inversionCount;
+        }
+
+        return inversionCount <= 1;
     }
 };
