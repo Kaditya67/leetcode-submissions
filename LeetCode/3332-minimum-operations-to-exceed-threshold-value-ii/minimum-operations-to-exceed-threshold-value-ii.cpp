@@ -11,8 +11,8 @@ public:
         int count = 0;
 
         while(pq.top()<k){
-            long long x=pq.top(); pq.pop();
-            long long y=pq.top(); pq.pop();
+            long x=pq.top(); pq.pop();
+            long y=pq.top(); pq.pop();
             pq.push(2*x+y);
             count++;
         }
