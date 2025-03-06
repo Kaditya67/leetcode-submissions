@@ -12,11 +12,12 @@ public:
         int a,b;
         int count=0;
         for(int i=1;i<(n*n+1);i++){
-            if(freq[i]==2 && count<2){
+            if(count>2) break;
+            if(freq[i]==2){
                 a = i;
                 count++;
             }
-            if(freq[i]==0 && count<2){
+            if(freq[i]==0){
                 b = i;
                 count++;
             }
