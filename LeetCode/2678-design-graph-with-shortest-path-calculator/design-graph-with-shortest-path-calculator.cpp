@@ -1,24 +1,17 @@
 class Graph {
 public:
-    vector<vector<pair<int,int>>>adj;
-    int N;
+    vector<vector<pair<int,int>>> adj;
+    int N = 0;
     Graph(int n, vector<vector<int>>& edges) {
         N = n;
-        adj.resize(N);
-        for(auto &edge:edges){
-            int u = edge[0];
-            int v = edge[1];
-            int cost = edge[2];
-
-            adj[u].push_back({v, cost});
+        adj = vector<vector<pair<int,int>>>(n, vector<pair<int,int>>());
+        for(auto& c : edges){
+            adj[c[0]].push_back({c[1], c[2]});
         }
     }
     
     void addEdge(vector<int> edge) {
-        int u = edge[0];
-        int v = edge[1];
-        int cost = edge[2];
-        adj[u].push_back({v, cost});
+        adj[edge[0]].push_back({edge[1], edge[2]});
     }
     
     int shortestPath(int node1, int node2) {
