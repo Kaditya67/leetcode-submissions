@@ -1,17 +1,15 @@
 class Solution {
 public:
     int minimumOperations(vector<int>& nums) {
-        int cnt = 0, temp;
-        while (true) {
-            unordered_map<int, int> mpp;
-            temp = 0;
-            for (int num : nums)
-                if (++mpp[num] == 2) temp++;
+        bool e[101] = {0};
+        int size = nums.size();
 
-            if (temp == 0) break;
-            nums.erase(nums.begin(), nums.begin() + min(3, (int)nums.size()));
-            cnt++;
+        for (int i = size - 1; i >= 0; --i) {
+            if (e[nums[i]])
+                return ceil(double(i + 1) / 3);
+            e[nums[i]] = true;
         }
-        return cnt;
+        
+        return 0;
     }
 };
