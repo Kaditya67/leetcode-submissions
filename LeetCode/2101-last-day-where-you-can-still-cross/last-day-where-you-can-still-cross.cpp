@@ -7,7 +7,39 @@ public:
         {0, 1},   // right
         {0, -1}   // left
     };
-
+    bool bfs(vector<vector<int>> &grid, int i, int j) {
+        
+        queue<pair<int, int>> que;
+        que.push({i, j});
+        grid[i][j] = 1;     // Mark Visited
+        
+        while(!que.empty()) {
+            
+            auto temp = que.front();
+            que.pop();
+            
+            int x = temp.first;
+            int y = temp.second;
+            
+            if(x == ROW-1)  // If last row reached --> Success
+                return true;
+            
+            for(vector<int> & dir : directions) {       // Visit neighbours
+                
+                int new_x = x + dir[0];
+                int new_y = y + dir[1];
+                
+                if(new_x >= 0 && new_x < ROW && new_y >= 0 && new_y < COL && grid[new_x][new_y] == 0) {
+                    que.push({new_x, new_y});
+                    grid[new_x][new_y] = true;
+                }
+                
+            }
+            
+        }
+        
+        return false;
+    }
     bool dfs(vector<vector<int>>& grid,int i,int j){
         // Case
         if(i<0 || i>=ROW || j<0 || j>=COL || grid[i][j]==1){
@@ -35,7 +67,7 @@ public:
         }
 
         for(int j=0;j<COL;j++){
-            if(grid[0][j]==0 && dfs(grid,0,j)){ // start from 1st row and move
+            if(grid[0][j]==0 && bfs(grid,0,j)){ // start from 1st row and move
                 return true;
             }
         }
