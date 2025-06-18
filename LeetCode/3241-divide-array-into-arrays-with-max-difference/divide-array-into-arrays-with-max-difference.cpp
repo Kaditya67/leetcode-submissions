@@ -1,22 +1,13 @@
 class Solution {
 public:
     vector<vector<int>> divideArray(vector<int>& nums, int k) {
-        // min-heap, putting elements in heap
-        priority_queue<int, vector<int>, greater<int>> pq(nums.begin(), nums.end());
-        vector<vector<int>> res;
-
-        while (pq.size() >= 3) {
-            int low = pq.top(); pq.pop();
-            int mid = pq.top(); pq.pop();
-            int great = pq.top(); pq.pop();
-
-            if (great - low <= k) {
-                res.push_back({low, mid, great});
-            } 
-            else {
-                return {}; // Cannot group
-            }
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        vector<vector<int>>ans;
+        for(int i=2; i<n; i+=3){
+            if((nums[i]-nums[i-2])>k) return {};
+            ans.push_back({nums[i-2], nums[i-1], nums[i]});
         }
-        return res;
+        return ans;
     }
 };
